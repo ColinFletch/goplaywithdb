@@ -18,11 +18,23 @@ const (
 )
 
 func routers() *chi.Mux {
-	router.Get("/posts", AllPosts)
+	router.Get("/posts", ViewAllPosts)
 	router.Get("/posts/{id}", ViewPost)
 	router.Post("/posts", CreatePost)
 	router.Put("/posts/{id}", UpdatePost)
 	router.Delete("/posts/{id}", DeletePost)
 
 	return router
+}
+
+func init() { 
+    router = chi.NewRouter() 
+    router.Use(middleware.Recoverer)  
+    
+    dbSource := fmt.Sprintf("root:%s@tcp(%s:%s)/%s?charset=utf8",  dbPass, dbHost, dbPort, dbName)
+    
+    var err error
+    db, err = sql.Open("mysql", dbSource) 
+    
+    catch(err)
 }
