@@ -17,16 +17,6 @@ const (
 	dbPass = "abc123"
 )
 
-func routers() *chi.Mux {
-	
-	router.Get("/posts", ViewAllPosts)
-	router.Get("/posts/{id}", ViewPost)
-	router.Post("/posts", CreatePost)
-	router.Put("/posts/{id}", UpdatePost)
-	router.Delete("/posts/{id}", DeletePost)
-
-	return router
-}
 
 func main() {
 	connection, err := driver.ConnectSQL(dbHost, dbPort, "root", dbPass, dbName)
@@ -50,11 +40,11 @@ func main() {
 
 func postRouter(postHandler *ph.Post) http.Handler {
 	r := chi.NewRouter()
-	r.Get("/", postHandler.Fetch)
-	r.Get("/{id:[0-9]+}", postHandler.GetByID)
-	r.Post("/", postHandler.Create)
-	r.Put("/{id:[0-9]+}", postHandler.Update)
-	r.Delete("/{id:[0-9]+}", postHandler.Delete)
+	r.Get("/", postHandler.ViewAllPosts)
+	r.Get("/{id:[0-9]+}", postHandler.ViewPost)
+	r.Post("/", postHandler.CreatePost)
+	r.Put("/{id:[0-9]+}", postHandler.UpdatePost)
+	r.Delete("/{id:[0-9]+}", postHandler.DeletePost)
 
 	return r
 }
